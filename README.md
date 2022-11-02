@@ -1,4 +1,4 @@
-## Description
+## Project Description
 
 Since the outbreak of Coronavirus Disease 2019 (COVID-19), people's lives have been greatly impacted all over the world. While a substantial number of studies on the pandemic’s impacts have been conducted by researchers and delivered to the general public, a gender-based perspective is still left out of the mainstream. However, more and more reports have shown that the pandemic might have been affecting women’s living conditions disproportionately. For instance, loss of access to contraceptive measures during lockdowns might have caused a large increase in unintended pregnancies according to UN News ("Covid-19 Could Lead to Millions of Unintended Pregnancies, New Un-Backed Data Reveals"). It was also reported that women have a higher chance of being frontline workers since they make up 70% of health and social care sector workers across 104 countries (Ravanera). Therefore, in this project, we would like to take a closer look at how women’s lives have been impacted by the pandemic, and if relevant issues of gender equality have been exacerbated.
 
