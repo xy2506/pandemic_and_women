@@ -1,64 +1,14 @@
-This is a template for the EDAV final project. It is based on the template created with *File, New Project..., New Directory, Book Project using bookdown* in RStudio. 
+## Description
+
+Since the outbreak of Coronavirus Disease 2019 (COVID-19), people's lives have been greatly impacted all over the world. While a substantial number of studies on the pandemic’s impacts have been conducted by researchers and delivered to the general public, a gender-based perspective is still left out of the mainstream. However, more and more reports have shown that the pandemic might have been affecting women’s living conditions disproportionately. For instance, loss of access to contraceptive measures during lockdowns might have caused a large increase in unintended pregnancies according to UN News ("Covid-19 Could Lead to Millions of Unintended Pregnancies, New Un-Backed Data Reveals"). It was also reported that women have a higher chance of being frontline workers since they make up 70% of health and social care sector workers across 104 countries (Ravanera). Therefore, in this project, we would like to take a closer look at how women’s lives have been impacted by the pandemic, and if relevant issues of gender equality have been exacerbated.
+
+To approach this problem, we would adopt a number of different perspectives. Our first concern is the direct impact of the disease on women’s health, so we would like to investigate if women were more likely than men to be infected with, to be hospitalized for, to be admitted to ICU for, and to die of the disease; we would also like to check the gender distribution of health workers infected with or died of the disease; in addition, we would compare if women had the equal chance to be vaccinated as men. Our second concern is the influence of pandemic on women’s safety; for example, we would like to answer whether the number of domestic violence and street attacks on women have had a significant rise. Moreover, we are concerned about the pandemic’s impact on women’s socioeconomics conditions, like if women are more likely than men to be laid off, underpaid, or not paid in the context of the pandemic. If possible, we would also like to gather data on and analyze the pandemic’s impact on women’s reproductive health and access to education.
+
+### References
+
+"Covid-19 Could Lead to Millions of Unintended Pregnancies, New Un-Backed Data Reveals." *UN News*, United Nations, 28 Apr. 2020, https://news.un.org/en/story/2020/04/1062742. 
+
+Ravanera, Carmina. "Primer on the Gendered Impacts of Covid-19." *Gender and the Economy*, University of Toronto, July 2021, https://www.gendereconomy.org/primer-on-the-gendered-impacts-of-covid-19/. 
 
 
-## ABSOLUTE ESSENTIALS
-
-*If you have any difficulties or have feedback of any kind, please file an issue or communicate through [Discussions](https://github.com/jtr13/EDAVtemplate/discussions).*
-
-### Copy this template
-
-- [ ] 1. Click the green "Use this template" button above.  DO NOT FORK THE REPO. Choose a descriptive name for your repo, such as "federalbudget" or "AIDSdeaths".  (If you change your mind before you do any work, delete your new repo and start over.)
-
-- [ ] 2. In the Description field, write: "Bookdown source files for EDAV final project".
-
-### Set up GitHub Pages	
-- [ ] 1. On the home page of your repo, click Settings. Click the "Pages" section on the left. Change **Source** from **None** to **main**, change **/ (root)** to **/docs** folder, and click Save. Above the **Source** line, a bar will appear with your book's URL. The bar will initially be blue and indicate that your book is *ready* to be published and will change to green once it is published. Copy the URL. (Note that sometimes there is a delay until your book actually appears at that URL. If it doesn't appear after a few minutes, make a change and commit it to trigger a GitHub Pages build.)	
-
-- [ ] 2. Click the gear button near "About" on the home page of the repo and paste your book URL into the **Website** field that appears on the right.
-
-### Clone the repo
-
-- [ ] 1. Clone your new repo with *File, New Project..., Version Control, Git* in RStudio.
-
-### Edit some key files
-
-- [ ] 1. In `index.Rmd`, change YOUR TITLE HERE to your title.
-
-- [ ] 2. In `index.Rmd`, change YOUR NAMES HERE to your names.
-
-- [ ] 3. In `_bookdown.yml`, change YOUR GITHUB USERNAME to your GitHub username in the two places it appears.
-
-- [ ] 4. In `_bookdown.yml`, change YOUR GITHUB REPO to your GitHub repo name in the two places it appears.
-
-(Note that 3. and 4. provide links to the `.Rmd` files of your project for editing and viewing. If you move your `.Rmd` files you will need to update these file paths. Once your book is rendered, test that the edit (pen) and view (eye) buttons work.)
-
-- [ ] 5. In `_output.yml`, change YOUR SHORT TITLE to a shortened version of your title. (Leave the "after:" line indicating that the book was published with bookdown as is.)
-
-### Render the book
-
-- [ ] 1. Install **bookdown** with `install.packages("bookdown")`. If you already have it, update to the most recent version.
-
-- [ ] 2. Render locally with `bookdown::render_book("index.Rmd")` or clicking the *Build book* button which should appear in the Build tab (in the same pane as Environment, History, Connections, ...).
-
-- [ ] 3. Use `browseURL("docs/index.html")` to view your book locally (or just open `index.html` in a browser).
-
-- [ ] 4. If it looks good, commit and push all changed files to GitHub. 
-
-(You will need to repeat steps 2 and 4 every time you wish to update the book online.)
-
-### Edit README	
-
-Once you've completed these steps, delete the content of this **README** and add a short description of your project with a link to the book URL. It would be appreciated if you add the following to the end:	
-
-*This repo was initially generated from a bookdown template available here: https://github.com/jtr13/EDAVtemplate.*	
-
-### Demo Video	
-
-A demo video showing how to create a **bookdown book** following these similar instructions: http://bit.ly/fiveminutebookdown Note that this video uses a different template.
-
-### Additional features	
-
-Please consult the official guide to **bookdown**: https://bookdown.org/yihui/bookdown
-
-
-
+This repo was initially generated from a bookdown template available here: https://github.com/jtr13/EDAVtemplate.

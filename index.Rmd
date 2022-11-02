@@ -1,5 +1,5 @@
 --- 
-title: "YOUR TITLE HERE"
+title: "Disproportionate Impact of COVID-19 Disruptions on Women's Socioeconomic and Living Conditions"
 author: "Xuechun Yuan, Keli Wang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
