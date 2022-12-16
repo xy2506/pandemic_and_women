@@ -1,0 +1,119 @@
+﻿Note: All respondents are women aged above 18 years,,,,
+Variable name,Variable name for grouped categories,Variable label,Reference to Phase II Questionnaire,Notes on codes
+weight,,Weights use for generating country-level estimates,NA,
+Pweight,,Weights use for generating pooled estimates,NA,
+AgeCat,,Category of age the respondent belongs to,S2.1,"1. 18-29
+2. 30-39
+3. 40-49
+4. 50-59
+5. 60 or older"
+Respondent_Serial,,Unique identification number,NA,
+Country,,Country name,NA,
+Locality,rS11,urban/ rural,S6,urban/ rural
+Marital_Status,BR_rA01,Marital Status,A01,"Single/ living with partner/ divorced, separated/ widowed"
+N_children,,Number of children ,A02,
+child,,whether have children or not,A02,Yes/ No
+hh_size,BR_rA06,Household Size,A04,"1-3 HH, 4-6 HH, 7+"
+Education,BR_rA02,"Education Level
+",A05,"less than primary/ primary/ secondary/ college/ post college/ Technical, vocational"
+Employment,BR_rA03,Respondent's main work each day,A06,Employed/ fulltime caregiver/ unemployed/ student/ others
+Earning_Income,BR_rA04,Whether earning income or not,A07,Yes/ No
+Earn_Spouse,rA04_1,Whether income earned is more or less than partner,A08,more/ less/ same/ NA
+Disability,,Whether they reported having disability or not,A09,Yes/ No
+hh_income,BR_rA11,Whether household income changed or not,A10,Incresed/ Decreased/ same
+cA12,rA12,No. of FAOs Food insecurity questions answered true,A11,
+FIES_1,,1. were worried you would not have enough food to eat?,A11,Yes/ No
+FIES_2,,2. were unable to eat healthy and nutritious food?,A11,Yes/ No
+FIES_3,,3. ate only a few kinds of food?,A11,Yes/ No
+FIES_4,,4. had to skip a meal?,A11,Yes/ No
+FIES_5,,5. ate less than you thought you should?,A11,Yes/ No
+FIES_6,,6. ran out of food?,A11,Yes/ No
+FIES_7,,7. were hungry but did not eat?,A11,Yes/ No
+FIES_8,,8. went without eating for a whole day?,A11,Yes/ No
+mental_stress,,"mental health (e.g. stress, anxiety, confidence etc.) has been affected due to COVID-19",B04,"Negatively, Positively, both, no change"
+C02,TB_C02,Feels unsafe walking alone during day or not,C02,grouped bottom two (Not safe) and top two (safe) categories
+C03,TB_C03,Feels unsafe walking alone during night or not,C03,grouped bottom two (Not safe) and top two (safe) categories
+,BR_rrC02_03,Feels unsafe walking alone either in day or at night or not,C02_03,Feels safe/ Feels unsafe/ same
+C04,,Feeling less or more safe on the onset of COVID-19,C04,Feels safe/ Feels unsafe
+C07,BR_rC07,Thinks VAW is a problem in the community or not,C05,grouped bottom two (thinks VAW a problem) and top two (doesn't think) categories
+C08,,Whether problem of VAW increased or decreased in COVID-19,C06,Incresed/ Decreased/ same
+C10,BR_rC10,women think domestic violence is common,C07,grouped bottom two (uncommon) and top two (common) categories
+C11,,Situation of domestic violence became better/ worse in COVID-19,C08,Better/ Worse/ Same
+C12,,Would seek support for domestic violence or not,C09,Yes/ No
+C14,BR_rC14,women think sexual harassment is common or not,C11,grouped bottom two (uncommon) and top two (common) categories
+C15,,Situation of sexual harassment better/ worse in COVID-19,C12,Better/ Worse/ Same
+C16,,Would seek support for sexual harassment or not,C13,Yes/ No
+C19,BR_rC19,Whether frequent conflicts at home or not,C16,"grouped bottom two (infrequent), middle (sometimes) and top two (frequent) categories"
+C20,,frequency of conflicts since COVID-19 increased/ decreased,C17,More/ less/ same
+C21,,Whether feels unsafe at home or not,C18,Yes/ No
+C22,,Whether feeling unsafe at home is better/ worse in COVID-19,C19,Better/ Worse/ Same
+C24,,how often go out of their house by themselves,C21,"1. Daily
+2. 2-3 times per week
+3. Once a week
+4. Once or twice a month
+5. Never"
+rC30_grouped,,Whether experiences/ knows some woman experiencing some form of VAW in their lifetime,C27,"a.	Yes = Yes, encountered VAW in their lifetime
+b.	No = Not encountered VAW in their lifetime
+c.	Refused
+d.	Don’t know"
+C30_1_grouped,,Whether experiences/ knows some woman of physical abuse  in their lifetime,C27,"a.	Yes = Yes, encountered VAW in their lifetime
+b.	No = Not encountered VAW in their lifetime
+c.	Refused
+d.	Don’t know"
+C30_2_grouped,,Whether experiences/ knows some woman of verbal abuse  in their lifetime,C27,"a.	Yes = Yes, encountered VAW in their lifetime
+b.	No = Not encountered VAW in their lifetime
+c.	Refused
+d.	Don’t know"
+C30_2_grouped,,Whether experiences/ knows some woman denied of basic needs in their lifetime,C27,"a.	Yes = Yes, encountered VAW in their lifetime
+b.	No = Not encountered VAW in their lifetime
+c.	Refused
+d.	Don’t know"
+C30_2_grouped,,Whether experiences/ knows some woman denied of communication in their lifetime,C27,"a.	Yes = Yes, encountered VAW in their lifetime
+b.	No = Not encountered VAW in their lifetime
+c.	Refused
+d.	Don’t know"
+C30_2_grouped,,Whether experiences/ knows some woman of sexual harassment in their lifetime,C27,"a.	Yes = Yes, encountered VAW in their lifetime
+b.	No = Not encountered VAW in their lifetime
+c.	Refused
+d.	Don’t know"
+C30_1_recode,,Whether experiences/ knows some woman of physical abuse ONLY since COVID-19,C27,"a.	Yes = Yes, encountered VAW, ONLY since the start of COVID-19
+b.	No = Not encountered VAW since the start of COVID-19
+c.	Refused
+d.	Don’t know
+e.           NA (not applicable)"
+C30_2_recode,,Whether experiences/ knows some woman of verbal abuse ONLY since COVID-19,C27,"a.	Yes = Yes, encountered VAW, ONLY since the start of COVID-19
+b.	No = Not encountered VAW since the start of COVID-19
+c.	Refused
+d.	Don’t know
+e.           NA (not applicable)"
+C30_3_recode,,Whether experiences/ knows some woman denied of basic needs ONLY since COVID-19,C27,"a.	Yes = Yes, encountered VAW, ONLY since the start of COVID-19
+b.	No = Not encountered VAW since the start of COVID-19
+c.	Refused
+d.	Don’t know
+e.           NA (not applicable)"
+C30_4_recode,,Whether experiences/ knows some woman denied of communication ONLY since COVID-19,C27,"a.	Yes = Yes, encountered VAW, ONLY since the start of COVID-19
+b.	No = Not encountered VAW since the start of COVID-19
+c.	Refused
+d.	Don’t know
+e.           NA (not applicable)"
+C30_5_recode,,Whether experiences/ knows some woman of sexual harassment ONLY since COVID-19,C27,"a.	Yes = Yes, encountered VAW, ONLY since the start of COVID-19
+b.	No = Not encountered VAW since the start of COVID-19
+c.	Refused
+d.	Don’t know
+e.           NA (not applicable)"
+C13,,Would most likely seek help for domestic violence from?,C10,Yes/ No
+C17,,Would most likely seek help for sexual harassment from?,C14,Yes/ No
+C26,TB_C26,Direct experience of IPV asked only in Colombia,C23,grouped bottom two (rarely/ never) and top two (often/ sometimes) categories
+C26_1,,IPV experienced before/ after of COVID-19,C23_1,Before/ after/ both
+C26_2,,IPV experience increased/ decreased during COVID-19,C23_2,Incresed/ Decreased/ same
+C23_1,,On the reasons for feeling unsafe at home 1. I have a serious medical condition or disability and feel vulnerable,C20,Yes/ No
+C23_2,,"2. My shelter is insecure from external threats (e.g., there are no locks on my front door)",C20,Yes/ No
+C23_3,,3. I am unable to communicate/reach out for help,C20,Yes/ No
+C23_4,,4. I am living with people I cannot trust,C20,Yes/ No
+C23_5,,"5. There is substance abuse (e.g., alcohol or drugs) in the household",C20,Yes/ No
+C23_6,,6. There is physical violence or threats of physical violence in my home,C20,Yes/ No
+C23_7,,7. There is verbal abuse in my home,C20,Yes/ No
+C23_8,,8. Other adults in the household have hurt me,C20,Yes/ No
+C23_9,,9. Other women in the household have been hurt,C20,Yes/ No
+C23_10,,10. Children in the household have been hurt,C20,Yes/ No
+C23_11,,11. Something else ,C20,Yes/ No

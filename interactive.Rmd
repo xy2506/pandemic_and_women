@@ -1,3 +1,180 @@
 # Interactive component
 
+We made three horizontal bar charts to analyse the impact of pandemic including change in women's working hours, job loss and income loss. You may play with the interactive plot here
+
+
+<script src="https://d3js.org/d3.v7.js"></script>
+<script>
+    <!-- Initialize a select button -->
+    <select id="selectButton"></select>
+    <!-- Color Scale -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <div id="my_dataviz"></div>
+</script>  
+
+<script>
+// Create svg and initial bars
+
+  const w = 460;
+  const h = 340;
+  const margin = {top: 20, right: 30, bottom: 40,
+      left: 150};
+  const innerWidth = w - margin.left - margin.right;
+  const innerHeight = h - margin.top - margin.bottom;
+  
+  
+  var groups = ['Reported job loss of Women', 'Reported income loss of Women', 'Impact on hours worked of Women']
+   // add the options to the button
+  d3.select("#selectButton")
+      .selectAll('myOptions')
+     	.data(groups)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+  
+  var myColor = d3.scaleOrdinal()
+      .domain(groups)
+      .range(d3.schemeSet2);
+  
+  const bardata1 = [{region: "Americas and the Caribbean", value: 49},
+                 {region: "Asian and the Pacificb", value: 28},
+                 {region: "All regions", value: 23},
+                 {region: "Esatern and Southern Africa", value: 19},
+                 {region: "Europe and Central Asia", value: 14},
+                 {region: "Arab States", value: 11},
+                 {region: "West and Central Africa", value: 8}];
+                 
+  const bardata2 = [{region: "West and Central Africa", value: 87},
+                 {region: "Americas and the Caribbean", value: 73},
+                 {region: "All regions", value: 61},
+                 {region: "Esatern and Southern Africa", value: 57},
+                 {region: "Arab States", value: 54},
+                 {region: "Europe and Central Asia", value: 39},
+                 ];
+                 
+  const bardata3 = [{region: "Decreased", value: 48},
+                 {region: "No change", value: 40},
+                 {region: "Increased", value: 13}];
+                 
+  bardata = bardata1
+      
+  const yScale = d3.scaleBand()
+      .domain(bardata.map(d => d.region))
+      .range([0, innerWidth])
+      .paddingInner(.1);
+          
+    
+  const xScale = d3.scaleLinear()
+          .domain([0, d3.max(bardata.map(d => d.value))])
+          .range([0,innerWidth]);
+    
+  const xAxis = d3.axisBottom()
+          .scale(xScale);
+    
+  const yAxis = d3.axisLeft()
+        .scale(yScale);
+    
+  // add svg
+    
+  const svg = d3.select("body")
+        .append("svg")
+          .attr("width", w)
+          .attr("height", h);
+    
+    // add background rectangle
+    
+  svg.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", w)
+          .attr("height", h)
+          .attr("fill", "aliceblue");
+    
+    // add bars as a group
+    
+  const bars = svg.append("g")
+  .attr("id", "plot")
+  .attr("transform", `translate (${margin.left}, ${margin.top})`)
+  .selectAll("rect")
+  .data(bardata);
+    
+  bars.enter().append("rect").transition().duration(600)
+  .attr("y", d => yScale(d.region))
+  .attr("x", d => xScale(0))
+  .attr("height", yScale.bandwidth())
+  .attr("width", d => xScale(d.value))
+  .attr("fill", 'orange');
+    
+  // add axes
+    
+  svg.append("g")
+  .attr("class", "xAxis")
+  .attr("transform", `translate (${margin.left}, ${h - margin.bottom})`)
+  .call(xAxis);
+    
+  svg.append("g")
+  .attr("class", "yAxis")
+  .attr("transform", `translate (${margin.left}, ${margin.top})`)
+  .call(yAxis);
+  
+  function update(selectedGroup) {
+    if (selectedGroup == groups[0]) {
+        bardata = bardata1; color = 'orange';}else if(selectedGroup == groups[1]){
+        bardata = bardata2; color = 'green';}else{
+        bardata = bardata3; color = 'blue';}
+    const yScale = d3.scaleBand()
+          .domain(bardata.map(d => d.region))
+          .range([0, innerWidth])
+          .paddingInner(.1);
+    const xScale = d3.scaleLinear()
+          .domain([0, d3.max(bardata.map(d => d.value))])
+          .range([0,innerWidth]);
+    const xAxis = d3.axisBottom()
+          .scale(xScale);
+    const yAxis = d3.axisLeft()
+          .scale(yScale);
+    
+    // add svg
+    
+    
+ // add background rectangle
+    svg.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", w)
+          .attr("height", h)
+          .attr("fill", "aliceblue");
+  // add bars as a group
+    const bars = svg.append("g")
+          .attr("id", "plot")
+          .attr("transform", `translate (${margin.left}, ${margin.top})`)
+        .selectAll("rect")
+          .data(bardata);
+    bars.enter().append("rect").transition().duration(600)
+          .attr("y", d => yScale(d.region))
+          .attr("x", d => xScale(0))
+          .attr("height", yScale.bandwidth())
+          .attr("width", d => xScale(d.value))
+          .attr("fill", color);
+    svg.append("g")
+          .attr("class", "xAxis")
+          .attr("transform", `translate (${margin.left}, ${h - margin.bottom})`)
+          .call(xAxis);
+    svg.append("g")
+          .attr("class", "yAxis")
+          .attr("transform", `translate (${margin.left}, ${margin.top})`)
+          .call(yAxis);
+  }
+        
+  // When the button is changed, run the updateChart function
+  d3.select("#selectButton").on("change", function(d){
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value");
+        // run the updateChart function with this selected option
+        update(selectedOption, svg);
+    })
+
+</script>
+
 
