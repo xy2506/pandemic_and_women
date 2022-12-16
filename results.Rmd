@@ -4,22 +4,15 @@
 
 Females are disproportionately affected by the pandemic in many aspects. First of all, as the worldwide healthcare workforce is made up of around 70% of females, it is not surprising that a much higher number of female health workers worldwide have been infected with COVID-19 than male health workers (female:male $\approx$ 3:1); however, considerably less female health workers have died from the disease than male workers (female:male $\approx$ 2:3).
 
-Women are more likely to be exposed to the disease but less less like to die from it. The lower fatality rate for female can be attributed to the fact that women tend to have stronger immune systems to help fight against the virus[1]. This can also be one of the reasons why woman are less likely to get hospitalized, because the might not be sick enough to go to hospital. However, it is also likely that woman are deprioritized in terms of hospitalization especially in the region where medical resources are limited (https://www.frontiersin.org/articles/10.3389/fpubh.2020.00152/full). Further study can focus on why woman are more likely to exposed to covid and whether the limited medical resources contributes to that woman are less likely to be hospitalized.
+Women are more likely to be exposed to the disease but less less like to die from it. The lower fatality rate for female can be attributed to the fact that women tend to have stronger immune systems to help fight against the virus (Jin et al.). This can also be one of the reasons why woman are less likely to get hospitalized, because the might not be sick enough to go to hospital. However, it is also likely that woman are deprioritized in terms of hospitalization especially in the region where medical resources are limited. Further study can focus on why woman are more likely to exposed to covid and whether the limited medical resources contributes to that woman are less likely to be hospitalized.
+
+The pandemic has aggravate the violence against woman. More than a quarter of woman reported that they have expereinced a form of violence or know someone has experience it during the three year of pandemic. Also, women are feeling less safe since the pandemic,  especially those who live in rural areas. Young women who live with children in rural areas are most like to be victim of violence.
 
 Overall, women are more negatively impacted by the pandemic in terms of economic activities, more likely to be burdened with increased domestic and care work as a result of the pandemic, and more likely to face increased difficulty in accessing goods and resources as a result of the pandemic.
 
-```{r, warning=FALSE, message=FALSE}
-library(ggplot2)
-library(tidyverse)
-library(vcd)
-library(gridGraphics)
-library(gridExtra)
-library(dplyr)
-library(hrbrthemes)
-library(countrycode)
-library(forcats)
-library(scales)
-```
+### Reference
+
+Jin, Jian-Min, et al. “Gender Differences in Patients with Covid-19: Focus on Severity and Mortality.” Frontiers in Public Health, vol. 8, 2020, https://doi.org/10.3389/fpubh.2020.00152. 
 
 ## WHO COVID-19 Detailed Surveillance Data Dashboard
 
@@ -52,31 +45,21 @@ It can be observed from the plot that a much higher number of female health work
 # Transform the character to date, populate variables malepop2020 and femalepop2020
 
 covid <- covid %>%
-  mutate(date = as.Date(date, format='%m/%d/%Y'), 
-         vac1_date = as.Date(vac1_date, format='%m/%d/%Y'),
-         vac2_date= as.Date(vac2_date, format='%m/%d/%Y'),
-         cases_date= as.Date(cases_date, format='%m/%d/%Y'),
-         deaths_date= as.Date(deaths_date, format='%m/%d/%Y'),
-         hosp_date= as.Date(hosp_date, format='%m/%d/%Y'),
-         cfr_date= as.Date(cfr_date, format='%m/%d/%Y')) %>%
-  group_by(country) %>% 
+  mutate(date = as.Date(date, format="%m/%d/%Y"), 
+         vac1_date = as.Date(vac1_date, format="%m/%d/%Y"),
+         vac2_date= as.Date(vac2_date, format="%m/%d/%Y"),
+         cases_date= as.Date(cases_date, format="%m/%d/%Y"),
+         deaths_date= as.Date(deaths_date, format="%m/%d/%Y"),
+         hosp_date= as.Date(hosp_date, format="%m/%d/%Y"),
+         cfr_date= as.Date(cfr_date, format="%m/%d/%Y")) %>%
+  group_by(country)%>% 
+  filter(country != 'Saba')%>%
   mutate(malepop2020 = first(na.omit(malepop2020)), femalepop2020 = first(na.omit(femalepop2020))) %>% ungroup()
-# Add continent for each country
-covid$continent <- countrycode(sourcevar = covid$country,
-                            origin = "country.name",
-                            destination = "continent")
-covid$continent[covid$country == 'Bonaire'] <- 'Americas'
-covid$continent[covid$country == 'England'] <- 'Europe'
-covid$continent[covid$country == 'Kosovo'] <- 'Europe'
-covid$continent[covid$country == 'Northern Ireland'] <- 'Europe'
-covid$continent[covid$country == 'Saba'] <- 'Americas'
-covid$continent[covid$country == 'Scotland'] <- 'Europe'
-covid$continent[covid$country == 'Wales'] <- 'Europe'
 ```
 
 We are interested in whether females and male are different in the probability of infection, hospitalization and death. In order to do that, we compute the rate of infection, rate of hospitalization and fatality rate for men and women respectively, and make cleveland dot plot for each rate.
 
-```{r fig.height=20, fig.width=10}
+```{r fig.height=30, fig.width=10}
 # Prepare data to analyze the rate of infection
 covid_cases <- covid %>%
   mutate(date = ifelse(is.na(cases_date) == TRUE,date,cases_date))%>%filter(is.na(cases_total_sum)==FALSE) %>% group_by(country) %>%slice_max(order_by = cases_date) %>% 
@@ -155,7 +138,8 @@ vaw_lifetime <- vaw %>%
   group_by(Country, rC30_grouped) %>%
   summarise(cnt = n()) %>%
   mutate(prop_vaw_lifetime = round(cnt / sum(cnt), 3)) %>% 
-  arrange(desc(prop_vaw_lifetime))  %>% filter(rC30_grouped=='Yes')
+  arrange(desc(prop_vaw_lifetime))  %>% filter(rC30_grouped=='Yes')%>%
+  mutate(Country = recode_factor(Country, "Cote d'Ivoire/Ivory Coast"= "Cote d'Ivoire")) %>%ungroup()
 #vaw_lifetime
 
 ggplot(data=vaw_lifetime, aes(x=fct_reorder(Country, prop_vaw_lifetime, .desc = T), y=prop_vaw_lifetime*100)) +
@@ -163,25 +147,24 @@ geom_bar(stat="identity",  fill='orange2') +
   ylim(0, 100)+
   geom_text(aes(label= prop_vaw_lifetime*100), vjust=-1) +
   theme(axis.text.x = element_text(angle = 40), axis.title.x = element_blank())+
-  labs(y= "Percentage", title = 'Proportion of women who reported ever having experienced a form of VAW or \n knowing another woman who experienced a form of violence')+theme_minimal(16)
+  labs(y= "Percentage", title = 'Proportion of women who reported ever having experienced a form of VAW \n or knowing another woman who experienced it')+
+  theme(axis.text.x = element_text(angle = 90), axis.title.x = element_blank())
 
 # barchart2
 vaw_since_covid_cnt <- vaw %>% filter(C30_1_recode =='Yes'| C30_2_recode=='Yes' | C30_3_recode=='Yes'| C30_4_recode =='Yes' | C30_5_recode=='Yes'|C30_1_recode =='Yes, since the start of COVID-19'| C30_2_recode=='Yes, since the start of COVID-19' | C30_3_recode=='Yes, since the start of COVID-19'| C30_4_recode =='Yes, since the start of COVID-19' | C30_5_recode=='Yes, since the start of COVID-19') %>% 
   group_by(Country) %>%  
   summarise(cnt = n())%>%
   arrange(desc(cnt))%>%ungroup()
-#vaw_since_covid_cnt
 
 vaw_total_cnt <- vaw %>% group_by(Country) %>% summarise(total_cnt = n()) %>% ungroup() %>% select(Country, total_cnt)
-prop_vaw_aft_covid <- left_join(vaw_since_covid_cnt, vaw_total_cnt, by = c('Country'='Country')) %>% mutate(prop_vaw_aft_covid = round(cnt/total_cnt,3))
-#prop_vaw_aft_covid
+prop_vaw_aft_covid <- left_join(vaw_since_covid_cnt, vaw_total_cnt, by = c('Country'='Country')) %>% mutate(prop_vaw_aft_covid = round(cnt/total_cnt,3))%>% mutate(Country = recode_factor(Country, "Cote d'Ivoire/Ivory Coast"= "Cote d'Ivoire")) %>% ungroup()
 
 ggplot(data=prop_vaw_aft_covid, aes(x=fct_reorder(Country, prop_vaw_aft_covid, .desc = T), y=prop_vaw_aft_covid*100)) +
 geom_bar(stat="identity",  fill='orange2') +
   ylim(0, 100)+
   geom_text(aes(label= prop_vaw_aft_covid*100), vjust=-1) +
-  theme(axis.text.x = element_text(angle = 40), axis.title.x = element_blank())+
-  labs(y= "Percentage", title = 'Proportion of women who reported ever having experienced a form of VAW or \n knowing another woman who experienced a form of violence \n since the COVID-19 pandemic')+theme_minimal(16)
+  theme(axis.text.x = element_text(angle = 90), axis.title.x = element_blank())+
+  labs(y= "Percentage", title = 'Proportion of women who reported ever having experienced a form of VAW \n or knowing another woman who experienced it \n since the COVID-19 pandemic')
 ```
 
 From the first bar chat we can observe that violence against women is a pre-existing problem. In 9 out of 13 countries, more than a half of women have ever experienced or a form of violence or know someone who experienced in lifetime. The proportion since the pandemic is also high. For all countries, more than one forth of women have experienced violence, which is definitely a high proportion given the pandemic has lasted for only three years. Clearly, The pandemic exasperates the violence against women.
@@ -198,31 +181,45 @@ vaw_recode <- vaw %>% mutate(C30_1_recode = recode_factor(vaw$C30_1_recode, Refu
   mutate(if_vaw_aft_covid = ifelse(C30_1_recode =='Yes'| C30_2_recode=='Yes' | C30_3_recode=='Yes'| C30_4_recode =='Yes' | C30_5_recode=='Yes', 'Yes','No')) 
 #unique(vaw_recode$if_vaw_aft_covid)
 ```
-```{r}
-par(mfrow = c(1, 3)) 
+
+
+```{r fig.height=9, fig.width=9}
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(2, 2)))
+
+pushViewport(viewport(layout.pos.col = 1, layout.pos.row = 1))
 vcd::mosaic(if_vaw_aft_covid ~ AgeCat, vaw_recode, direction = c("v", "h"), 
             set_labels=list(AgeCat = c('18-29','30-39','40-49','50-59','>=60')),
             set_varnames = c(if_vaw_aft_covid="If reported VAW since the pandemic", AgeCat="Age"),
             margins = c(3, 3),
             las=2,
             highlighting_fill= c("#cc9966","#ff99ff"),
-            rot_labels=c(0,0))
+            rot_labels=c(20,0),
+            newpage = FALSE)
+popViewport()
 
+pushViewport(viewport(layout.pos.col = 2, layout.pos.row = 1))
 vcd::mosaic(if_vaw_aft_covid ~ child, vaw_recode, direction = c("v", "h"), 
             set_varnames = c(if_vaw_aft_covid="If reported VAW since the pandemic", child="living with children"),
             margins = c(3, 3),
             las=2,
             highlighting_fill= c("#cc9966","#ff99ff"),
-            rot_labels=c(0,0))
+            rot_labels=c(0,0),
+            newpage = FALSE)
+popViewport()
 
+pushViewport(viewport(layout.pos.col = 1, layout.pos.row = 2))
 vcd::mosaic(if_vaw_aft_covid ~ Locality, vaw_recode, direction = c("v", "h"), 
             set_labels=list( Locality = c('rural', 'urban')),
             set_varnames = c(if_vaw_aft_covid="If reported VAW since the pandemic"),
-            margins = c(3, 3),
-            las=2,
+            # margins = c(3, 3),
+            # las=2,
             highlighting_fill= c("#cc9966","#ff99ff"),
-            rot_labels=c(0,0))
+            rot_labels=c(0,0),
+            newpage = FALSE)
+popViewport()
 
+pushViewport(viewport(layout.pos.col = 2, layout.pos.row = 2))
 vaw_employment <- vaw_recode %>% filter(is.na(BR_rA03) == FALSE)
 vcd::mosaic(if_vaw_aft_covid ~ BR_rA03, vaw_recode, direction = c("v", "h"), 
             set_labels=list( Locality = c('rural', 'urban')),
@@ -230,7 +227,9 @@ vcd::mosaic(if_vaw_aft_covid ~ BR_rA03, vaw_recode, direction = c("v", "h"),
             margins = c(3, 3),
             las=2,
             highlighting_fill= c("#cc9966","#ff99ff"),
-            rot_labels=c(40,0))
+            rot_labels=c(30,0),
+            newpage = FALSE)
+popViewport()
 ```
 
 Woman aged between 18 and 29 are most likely to reported their experiences of VAW since pandemic and women older than 60 are least like to do that. It is possible that young women are more likely to be the victim and also they are more willing to tell others about the experience and seek help.   
@@ -239,7 +238,7 @@ Those who live with children are more likely to experience violence. One possibl
 
 Woman living in rural area are more likely to experience violence. This is probably because rural areas are less populated and the predators tend to commit crime in such areas.
 
-Finally, women that are unemployed are much more likely to be treated inapproriately. They may economically dependent on their spouse or partner, and thus tend to endure domestic violence.
+Finally, women that are unemployed are much more likely to be treated violently. They may economically dependent on their spouse or partner, and thus tend to endure domestic violence.
 
 ```{r}
 vaw_locality <- vaw_recode %>% filter((rS11 == 'Rural' | rS11 == 'Urban') & (C03 == "Safe"|C03 == "Very safe"|C03 == "Not safe at all"|C03 == "Not very safe"))%>% select(rS11, C03) %>% rename(locality = rS11, level_feeling_safety = C03)
@@ -257,7 +256,18 @@ vaw_locality_summary_diverging <- vaw_locality_summary %>%
   mutate(percent_answers_label = percent(percent_answers, accuracy = 1))
 #vaw_locality_summary_diverging
 
-vaw_locality_summary_diverging_right_order %>%
+vaw_locality_summary_diverging_good_labels <- vaw_locality_summary_diverging %>%
+  mutate(percent_answers_label = abs(percent_answers)) %>% 
+  mutate(percent_answers_label = percent(percent_answers_label, accuracy = 1))
+#vaw_locality_summary_diverging_good_labels
+
+vaw_locality_summary_diverging_right_order <- vaw_locality_summary_diverging_good_labels %>% 
+  mutate(level_feeling_safety = fct_relevel(level_feeling_safety,
+                               "Not very safe", "Not safe at all", "Safe", "Very safe"),
+         level_feeling_safety = fct_rev(level_feeling_safety)) 
+#vaw_locality_summary_diverging_right_order
+
+vaw_locality_summary_diverging_right_order%>%
   ggplot(aes(x = locality, 
              y = percent_answers,
              fill = level_feeling_safety)) +
@@ -268,13 +278,7 @@ vaw_locality_summary_diverging_right_order %>%
             fontface = "bold") +
   coord_flip() +
   scale_x_discrete() +
-  scale_fill_manual(breaks = "Not safe at all", "Not very safe", "Safe", "Very safe",
-                    values = c(
-                      "Not safe at all" = "darkorange3",
-                      "Not very safe" = "orange",
-                      "Safe" = "deepskyblue",
-                      "Very safe" = "deepskyblue4"
-                    )) +
+  scale_fill_manual(values = c("#153E7E", "#6698FF", "#736F6E", "#C0C0C0")) +
   labs(title = "How safe did respondent feel to walk alone at night?",
        x = NULL,
        fill = NULL) +
@@ -413,15 +417,13 @@ percentage = count/total
 sex = rep(c("Men", "Women"), 4)
 resource = c(rep("food", 2), rep("sanitary_products", 2), 
              rep("medical_care", 2), rep("friends_support", 2))
-ordered = c("friends_support", "medical_care", "sanitary_products", "food")
-resource = factor(resource, levels = ordered)
 df_res = data.frame(resource, sex, percentage)
 
 
 ggplot(df_res, aes(sex, resource, fill= percentage)) +
   geom_tile() +
   scale_fill_gradient(low="white", high="blue") +
-  ggtitle("Percentage of respondents with\n increased difficulty in \naccessing goods & resources") +
+  ggtitle("Percentage of respondents with\nincreased difficulty in \naccessing goods & resources") +
   ylab("goods/resource type") +
   theme_ipsum() +
   theme_minimal(16)

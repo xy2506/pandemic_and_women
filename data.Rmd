@@ -2,7 +2,218 @@
 
 ## Sources
 
+### WHO COVID-19 Detailed Surveillance Data Dashboard
+
+This dataset contains the demographic information and details about the COVID-19 cases for both the general population and health workers for over 200 countries from January 2020 to the present date. The data was collected by the World Health Organization and was published on their COVID-19 Detailed Surveillance Data Dashboard; they collected the data through official reporting to WHO, the website *Our World in Data*, the website *FIND*, and official public websites not officially reported to WHO ("Measuring the Shadow Pandemic: Violence against Women during Covid-19").
+
+There are 25,519 records in the dataset, with a total of 27 columns/variables. The majority of the variables are numeric data containing detailed information about the COVID-19 cases, such as the daily or weekly numbers of testing, cases, hospitalizations, discharged cases, and deaths; the rest of the variables are categorical text data containing the source of data and demographic information such as the region, country, and sex of the affected population. We will be using the portion of data that is focused on health workers to explore the impact of COVID-19 on health workers of different sexes.
+
+Note that part of the dataset has been updated daily while the rest has been updated weekly, so each row contain the record for a specific day or week for patients of a specific sex in a specific country, depending on how often the data was collected for that specific country. Also, the data for many countries have missing values in quite a few variables regarding some details about the COVID-19 cases, such as the number of health worker cases and deaths. 
+
+Data Source: 
+https://app.powerbi.com/view?r=eyJrIjoiYWRiZWVkNWUtNmM0Ni00MDAwLTljYWMtN2EwNTM3YjQzYmRmIiwidCI6ImY2MTBjMGI3LWJkMjQtNGIzOS04MTBiLTNkYzI4MGFmYjU5MCIsImMiOjh9
+
+
+### COVID-19 Sex-Disaggregated Data Tracker
+
+We obtained the data from the website of The Sex, Gender and COVID-19 Project produced collaboratively by Global Health 50/50, the African Population and Health Research Center and the International Center for Research on Women. 
+The organizations collected sex disaggregated data on the indicators available from the WHO COVID-19 Detailed Surveillance Data Dashboard, and data for vaccinations from WHO Coronavirus Dashboard were integrated to the dashboard every month. Manual data collection was carried out every alternate month to supplement data on the indicators not available from WHO dashboard such as ICU admissions.
+
+The dataset contains sex-disaggregated cumulative numbers and proportions of testing, cases, hospitalizations, ICU admissions, deaths, and vaccinations reported every two weeks for over 200 countries from April 2020 to June 2022. For instance, we have number of deaths for female and number of deaths for male respectively in addition to the total number of deaths. There are 67 varables and 6,739 observations in the dataset. The columns are all numeric except that country and a few columns of dates are in character form.
+
+Data Source: https://globalhealth5050.org/the-sex-gender-and-covid-19-project/dataset/
+
+### Survey on Violence Against Woman During COVID-19
+
+This set of data comes from the Rapid Gender Assessment surveys specifically focused on violence against women and COVID-19 (VAW RGAs) conducted by United Nations Women in 13 countries from April to September 2021. The data was collected by conducting face-to-face interviews along with remote surveys during the lockdowns. UN Women led this study in collaboration with Ipsos, with support from national statistical offices, national women’s machineries and a technical advisory group of experts to guide the overall survey process ("Measuring the Shadow Pandemic: Violence against Women during Covid-19").
+
+Each observation in the survey dataset is a female individual’s responses to the survey questionnaire. The survey questions are composed of three parts: questions on interviewee’s demographic information, health condition and personal safety. The data has 16,154 observations and 142 variables. The variables are comprised of mostly categorical text data and some numeric data. 
+
+Data Source: https://data.unwomen.org/publications/vaw-rga
+
+### Survey on Socioeconomic Impacts of COVID-19
+
+This set of data contains male and female participants' answers to United Nations Women's rapid gender assessments (RGAs) questionnaires. The RGA was conducted by UN Women in at least 52 countries between March 2020 and March 2021, and focused on five areas of concern: 1) economic activities and resources; 2) unpaid domestic and care work; 3) access to goods and services, 4) emotional and physical wellbeing; and 5) relief measures ("Rapid Gender Assesments on the Socioeconomic Impacts of COVID-19").
+
+There are a total of 6 datasets published, 1 for each region/continent. The 6 regions are Asia and the Pacific, Arab states, Europe and Central Asia, East and Southern Africa, West and Central Africa, and Americas and the Caribbean. Since the data for Asia and the Pacific are already highly processed, we will be using only the datasets for the other 5 regions in this project. The 5 datasets used contain 4,119 to 20,957 records and 102 to 236 variables, while each record is an individual’s responses to the survey questionnaire. The majority of the variables are categorical text data that contain the interviewee's demographic information and answers to the survey questions, while the minority are numeric data representing the interviewee's age, household size, number of children, etc. The 5 datasets are combined to create a dataset of all regions, and the resulting final dataset contains 71,251 records and 14 variables, which are all categorical data that represent the interviewee's region, sex, and answers to the survey questions.
+
+Note that since the questionnaires for each region are different, resulting in different number of variables in the data for each region, we selected 14 variables that resulted from the common questions across the questionnaires for the 5 regions. Even so, there are still quite a few missing values in many of the variables. 
+
+Data Source: https://data.unwomen.org/rga
+
+### References
+
+"Measuring the Shadow Pandemic: Violence against Women during Covid-19." *UN Women Data Hub*, UN Women, 24 Nov. 2021, https://data.unwomen.org/publications/vaw-rga#_dashboardFilterRGA. 
+
+"Rapid Gender Assesments on the Socioeconomic Impacts of COVID-19." *UN Women Data Hub*, UN Women, 16 Dec. 2021, https://data.unwomen.org/rga. 
+
+
 ## Cleaning / transformation
 
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(vcd)
+library(gridGraphics)
+library(gridExtra)
+library(dplyr)
+library(hrbrthemes)
+library(countrycode)
+library(forcats)
+library(scales)
+library(redav)
+library(data.table)
+library(tidyr)
+library(mi)
+```
+
+### WHO COVID-19 Detailed Surveillance Data Dashboard
+
+Since we only need the data for the health workers, we would only select the variables indicating the worker's sex, the number of health worker COVID-19 cases, and the number of health workers that died of COVID-19. Since in the original dataset, each row contain the record for a specific day or week for patients of a specific sex in a specific country, we would group the data by sex and then sum up the COVID-19 cases and deaths in each row to get the total count of COVID-19 cases and deaths for health workers of each sex.
+
+```{r}
+# select the 3 variables needed
+df_who = read.csv("data/WHO/WHO_all_ages.csv")
+df_who = df_who[c("SEX", "DETAILED_CASES_HW", "DETAILED_CASES_DEATHS_HW")]
+colnames(df_who) <- c("Sex", "Cases", "Deaths")
+```
+
+```{r, message=FALSE}
+# group the data by sex and then sum up the COVID-19 cases and deaths in each row
+df_hw <- df_who %>%
+  na.omit() %>%
+  group_by(Sex) %>%
+  summarize(Cases = sum(Cases),
+            Deaths = sum(Deaths))
+```
+
+### COVID-19 Sex-Disaggregated Data Tracker
+
+The dataset have some empty entries. To ensure we detect all the missing values, we convert empty entries to NA before we analyse missing values. The columns of dates are all in character form, so we convert them to date format. We omit a few  countries do not have total population since population is important for our analysis.The data set has too many missing values and some columns has no entries. Also different countries has different number of rows of reported data and the dates are not consistent. We would select the earliest non-empty observation for each country to analyse.
+
+### Survey on Violence Against Woman During COVID-19
+
+The leves of some columns in the dat set are long responses to the questionaire, like "No, stay the same" and "Work for someone else for pay". We need to recode the levels. However, sine there are 142 varaibles and the levels of reponse is different for each question, it is hard to preprocess all the variables all at once. Also, the data set has already had some recoded columns in it, which make it more complicated to recode the variables. Therefore, we just recode levels of some variables on the fly when needed.
+
+```{r}
+# cleaning and transformation
+vaw <- read.csv(file = 'safety/VAW RGAs_microdata.csv')
+vaw <- replace(vaw, vaw=='', NA) #replace empty entries with NA
+dim(vaw)
+```
+
+### Survey on Socioeconomic Impacts of COVID-19
+
+The 5 datasets are combined to create a dataset of all regions. 14 variables that resulted from the common questions across the questionnaires for the 5 regions are selected from the original 102 to 236 variables of the 5 datasets. Then, 5 datasets with the 14 selected variables are combined to create the final dataset that contains a total of 71,251 records. The 14 selected variables are all categorical data that represent the interviewee's region, sex, and answers to the survey questions.
+
+```{r}
+# read in the 5 datasets
+df_am = read.csv("data/RGA/RGA_Americas&theCaribbean.csv")
+df_am["region"] = rep("Americas&the_Caribbean", nrow(df_am))
+
+df_wcaf = read.csv("data/RGA/RGA_West&Central_Africa.csv")
+df_wcaf["region"] = rep("West&Central_Africa", nrow(df_wcaf))
+
+df_esaf = read.csv("data/RGA/RGA_East&Southern_Africa.csv")
+df_esaf["region"] = rep("East&Southern_Africa", nrow(df_esaf))
+
+df_eca = read.csv("data/RGA/RGA_Europe&Central_Asia.csv")
+df_eca["region"] = rep("Europe&Central_Asia", nrow(df_eca))
+
+df_as = read.csv("data/RGA/RGA_Arab_states.csv")
+df_as["region"] = rep("Arab_states", nrow(df_as))
+```
+
+```{r}
+df_list = list(df_wcaf, df_esaf, df_eca, df_as)
+
+df = df_am[c("region", "sex", "lost_job", "insurance_unemp", "income_loss", "work_hours", 
+     "hh_resp", "child_rep", "adult_care", "partner_support", "food_access", "access_product",
+     "access_care", "friends_support")]
+
+for (i in df_list){
+  i <- i[c("region", "sex", "lost_job", "insurance_unemp", "income_loss", "work_hours", 
+     "hh_resp", "child_rep", "adult_care", "partner_support", "food_access", "access_product",
+     "access_care", "friends_support")]
+  df = rbind(df, i)
+}
+```
+
 ## Missing value analysis
+
+### WHO COVID-19 Detailed Surveillance Data Dashboard
+
+The dataset analyzed is the original dataset before any transformation is applied.
+
+Only less than 25% of the data are complete cases without any missing values. The variable "Sex" has no missing value while the other two have more than 75% rows missing. The rows miss either the "Deaths" variable or both the "Deaths" and "Cases" variables, while more than 75% of the rows miss both the "Deaths" and "Cases" variables. Rows with missing would be removed since they do not contribute to the numbers of health worker COVID-19 cases and deaths and it does not make sense to impute them.
+
+```{r, message=FALSE}
+plot_missing(df_who, percent = TRUE)
+```
+
+### COVID-19 Sex-Disaggregated Data Tracker
+
+The dataset has 67 variables and 6739 observations:
+
+```{r cars}
+covid <- read.csv(file='health/Dataset-historic.csv')
+dim(covid) # The dataset has 67 variables and 6739 observations
+
+#Look at number of NA in each column 
+covid <- replace(covid, covid=='', NA) #replace empty entries with NA
+#View(covid)
+na_count <-sapply(covid, function(y) sum(length(which(is.na(y)))))
+na_count <- data.frame(na_count) #We have many columns with all missing values
+na_count %>% mutate(na_percent= round(na_count/6739*100, 2))
+```
+
+Now we select 41 variables that we are interested in from the 67 variables:
+
+```{r, warning=FALSE, message=FALSE}
+#select the columns we're interested in
+covid <- covid %>% select(country,country_code, date,
+                      cases_date,cases_total_sum,cases_male,cases_female,cases_male_pct,cases_female_pct,
+                      deaths_date,deaths_total_sum,deaths_male,deaths_female,deaths_male_pct,deaths_female_pct,
+                      hosp_date, hosp_total,hosp_male,hosp_female,hosp_male_pct,hosp_female_pct, 
+                      cfr_date,cfr_pct_tot,cfr_pct_male,cfr_pct_female,cfr_ratio,
+                      totpop2020,malepop2020,femalepop2020,
+                      vac1_date,vac1_total,vac1_male,vac1_female,vac1_male_pct,vac1_female_pct,
+                      vac2_date,vac2_total,vac2_male,vac2_female,vac2_male_pct,vac2_female_pct)
+dim(covid)
+
+# Missing value analysis
+x<-missing_data.frame(covid)
+image(x)
+
+```
+From the pattern of plot of missing values, we can see that the five variables related to number of cases (case_total, case_female, case_male, cases_male_pct cases_female_pct) are highly related. The five columns variables related to number of deaths are highly related (deaths_total_sum,deaths_male,deaths_female,deaths_male_pct,deaths_female_pct). The five columns variables related to number of people get hospotalized are highly related(hosp_total,hosp_male,hosp_female,hosp_male_pct,hosp_female_pct). Variables related to vaccination also show the similar pattern.
+
+### Survey on Violence Against Woman During COVID-19
+
+```{r}
+# Missing value
+#Look at number of NA in each column 
+na_count_vaw <-sapply(vaw, function(y) sum(length(which(is.na(y)))))
+na_count_vaw <- data.frame(na_count_vaw)
+na_count_vaw %>% mutate(na_percent= round(na_count_vaw/dim(vaw)[1]*100, 2))
+#x_vaw<-missing_data.frame(vaw)
+#image(x_vaw)
+```
+
+The variable N_children is missing for about one forth of the respondents. About 7.69% of the samples have NA values for the three variables C30_1_recode C30_2_recode, C30_3_recode, C30_4_recode, C30_5_recode. The dataset also have quite columns with all missing values.
+
+### Survey on Socioeconomic Impacts of COVID-19
+
+The dataset analyzed is the combined dataset that has already been transformed.
+
+Only less than 30% of the data are complete cases without any missing values. The variables representing region, sex, lost job, lost income, domestic responsibility, childcare responsibility, and adultcare responsibility have no missing value, while the ones representing food access, sanitary product access, medical care access, and partner support have less than 25% rows missing and the ones representing friend and family support, work hours, and unemployment insurance have around 75% rows missing. The rows with missing values have NAs in 3, 4, or 6 of the variables that contain NAs. Rows with missing values would not be removed altogether, but each set of data extracted for plotting a single chart would have their missing values removed right before each single chart is plotted in order to reduce data loss. It does not make sense to impute the missing values.
+
+```{r fig.height=7, fig.width=9, message=FALSE}
+df2 <- copy(df)
+colnames(df2) <- c("region", "sex", "l_job", "insr", "l_inc", "w_hrs", 
+     "hh_rep", "ch_rep", "ad_rep", "pn_sup", "food", "prod",
+     "care", "frn_sup")
+plot_missing(df2, percent = TRUE)
+```
+
 

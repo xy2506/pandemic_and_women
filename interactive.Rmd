@@ -1,16 +1,20 @@
 # Interactive component
 
-We made three horizontal bar charts to analyse the impact of pandemic including change in women's working hours, job loss and income loss. You may play with the interactive plot here
+## Survey on Socioeconomic Impacts of COVID-19
 
+The dataset used is the RGA data collected by UN Women. We made three horizontal bar charts to display the percentage(%) of women reporting change in work hours, job loss and income loss as a result of the pandemic. We have incorporated a new dimension here which is the respondents region/continent; therefore, trends across regions/continents can be observed.
+
+To interact with the graph, the audience only needs to click the dropdown menu and select the variable that they would like to explore. This interactivity would allow the audience to be familiar with the list of available variables and therefore have a better idea of what they want to look for; they can then focus on their target variable and get to the results faster by selecting their target with the dropdown menu. They can also switch between the results that they are interested in more conveniently.
+
+### Percentage(%) of women reporting change in work hours, job loss and income loss
 
 <script src="https://d3js.org/d3.v7.js"></script>
-<script>
-    <!-- Initialize a select button -->
-    <select id="selectButton"></select>
-    <!-- Color Scale -->
-    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <div id="my_dataviz"></div>
-</script>  
+
+<!-- Initialize a select button -->
+<select id="selectButton"></select>
+<!-- Color Scale -->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<div id="my_dataviz"></div>
 
 <script>
 // Create svg and initial bars
@@ -40,7 +44,7 @@ We made three horizontal bar charts to analyse the impact of pandemic including 
   const bardata1 = [{region: "Americas and the Caribbean", value: 49},
                  {region: "Asian and the Pacificb", value: 28},
                  {region: "All regions", value: 23},
-                 {region: "Esatern and Southern Africa", value: 19},
+                 {region: "Eastern and Southern Africa", value: 19},
                  {region: "Europe and Central Asia", value: 14},
                  {region: "Arab States", value: 11},
                  {region: "West and Central Africa", value: 8}];
@@ -48,7 +52,7 @@ We made three horizontal bar charts to analyse the impact of pandemic including 
   const bardata2 = [{region: "West and Central Africa", value: 87},
                  {region: "Americas and the Caribbean", value: 73},
                  {region: "All regions", value: 61},
-                 {region: "Esatern and Southern Africa", value: 57},
+                 {region: "Eastern and Southern Africa", value: 57},
                  {region: "Arab States", value: 54},
                  {region: "Europe and Central Asia", value: 39},
                  ];
@@ -77,10 +81,10 @@ We made three horizontal bar charts to analyse the impact of pandemic including 
     
   // add svg
     
-  const svg = d3.select("body")
+  const svg = d3.select("#my_dataviz")
         .append("svg")
           .attr("width", w)
-          .attr("height", h);
+          .attr("height", h)
     
     // add background rectangle
     
@@ -176,5 +180,3 @@ We made three horizontal bar charts to analyse the impact of pandemic including 
     })
 
 </script>
-
-
